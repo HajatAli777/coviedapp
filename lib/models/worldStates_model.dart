@@ -1,4 +1,4 @@
-class CovidStats {
+class WorldstatesModel {
   final int updated;
   final int cases;
   final int todayCases;
@@ -21,7 +21,7 @@ class CovidStats {
   final double criticalPerOneMillion;
   final int affectedCountries;
 
-  CovidStats({
+  WorldstatesModel({
     required this.updated,
     required this.cases,
     required this.todayCases,
@@ -45,8 +45,8 @@ class CovidStats {
     required this.affectedCountries,
   });
 
-  factory CovidStats.fromJson(Map<String, dynamic> json) {
-    return CovidStats(
+  factory WorldstatesModel.fromJson(Map<String, dynamic> json) {
+    return WorldstatesModel(
       updated: json['updated'],
       cases: json['cases'],
       todayCases: json['todayCases'],
