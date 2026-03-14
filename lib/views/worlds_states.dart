@@ -1,6 +1,7 @@
 import 'package:coviedapp/models/worldStates_model.dart';
 import 'package:coviedapp/reuseable/reuse_rows.dart';
 import 'package:coviedapp/services/states_services.dart';
+import 'package:coviedapp/views/countries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -47,102 +48,124 @@ class _WorldsStatesState extends State<WorldsStates>
         title: const Text("World COVID Statistics"),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: FutureBuilder(
-            future: statesServices.fetchWorldStatesRecords(),
-            builder: (context, AsyncSnapshot<WorldstatesModel> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: SpinKitFadingCircle(
-                    color: Colors.blue,
-                    size: 50.0,
-                    controller: controller,
-                  ),
-                );
-              }
-
-              var data = snapshot.data!;
-
-              return Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .02,
-                  ),
-
-                  /// Pie Chart
-                  PieChart(
-                    dataMap: {
-                      "Total": data.cases!.toDouble(),
-                      "Recovered": data.recovered!.toDouble(),
-                      "Deaths": data.deaths!.toDouble(),
-                      "Active": data.active!.toDouble(),
-                    },
-                    chartValuesOptions: const ChartValuesOptions(
-                      showChartValuesInPercentage: true,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: FutureBuilder(
+              future: statesServices.fetchWorldStatesRecords(),
+              builder: (context, AsyncSnapshot<WorldstatesModel> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: SpinKitFadingCircle(
+                      color: Colors.blue,
+                      size: 50.0,
+                      controller: controller,
                     ),
-                    chartRadius: MediaQuery.of(context).size.width / 3.2,
-                    animationDuration: const Duration(milliseconds: 1200),
-                    chartType: ChartType.ring,
-                    legendOptions: const LegendOptions(
-                      legendPosition: LegendPosition.left,
+                  );
+                }
+        
+                var data = snapshot.data!;
+        
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .02,
                     ),
-                    colorList: colorList,
-                  ),
-
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .05,
-                  ),
-
-                  /// Card Stats
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          ReuseRows(
-                              title: "Total",
-                              value: data.cases.toString()),
-                          ReuseRows(
-                              title: "Recovered",
-                              value: data.recovered.toString()),
-                          ReuseRows(
-                              title: "Deaths",
-                              value: data.deaths.toString()),
-                          ReuseRows(
-                              title: "Active",
-                              value: data.active.toString()),
-                        ],
+        
+                    /// Pie Chart
+                    PieChart(
+                      dataMap: {
+                        "Total": data.cases!.toDouble(),
+                        "Recovered": data.recovered!.toDouble(),
+                        "Deaths": data.deaths!.toDouble(),
+                        "Active": data.active!.toDouble(),
+                      },
+                      chartValuesOptions: const ChartValuesOptions(
+                        showChartValuesInPercentage: true,
                       ),
+                      chartRadius: MediaQuery.of(context).size.width / 3.2,
+                      animationDuration: const Duration(milliseconds: 1200),
+                      chartType: ChartType.ring,
+                      legendOptions: const LegendOptions(
+                        legendPosition: LegendPosition.left,
+                      ),
+                      colorList: colorList,
                     ),
-                  ),
-
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .05,
-                  ),
-
-                  /// Button
-                  Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 36, 141, 41),
-                      borderRadius: BorderRadius.circular(10),
+        
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .05,
                     ),
-                    child: const Center(
-                      child: Text(
-                        "Track Countries",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+        
+                    /// Card Stats
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            ReuseRows(
+                                title: "Total",
+                                value: snapshot.data!.cases.toString()),
+                            ReuseRows(
+                                title: "Deaths",
+                                value: snapshot.data!.recovered.toString()),
+                            ReuseRows(
+                                title: "Recoevered",
+                                value: snapshot.data!.deaths.toString()),
+                            ReuseRows(
+                                title: "Active",
+                                value: snapshot.data!.active.toString()),
+                                
+                            ReuseRows(
+                                title: "Critical",
+                                value: snapshot.data!.cases.toString()),
+                            ReuseRows(
+                                title: "Today Deaths",
+                                value: snapshot.data!.recovered.toString()),
+                            ReuseRows(
+                                title: "Today Recovered",
+                                value: snapshot.data!.deaths.toString()),
+                                                     ],
                         ),
                       ),
                     ),
-                  )
-                ],
-              );
-            },
+        
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * .05,
+                    ),
+        
+                    /// Button
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CountriesPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 36, 141, 41),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Track Countries",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
