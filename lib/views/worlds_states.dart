@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:coviedapp/reuseable/reuse_rows.dart';
+import 'package:coviedapp/services/states_services.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
@@ -41,6 +42,7 @@ class _WorldsStatesState extends State<WorldsStates> with TickerProviderStateMix
   ];
   @override
   Widget build(BuildContext context) {
+    StatesServices services = StatesServices();
     return Scaffold(
       body: SafeArea(child: 
       Padding(
@@ -48,6 +50,16 @@ class _WorldsStatesState extends State<WorldsStates> with TickerProviderStateMix
         child: Column(
           children: [
             SizedBox(height: MediaQuery.of(context).size.height*.01,),
+            FutureBuilder(
+              future: services.fetchWorldStatesRecords(),
+              builder: (context, snapshot){
+              if(snapshot.hasData){
+                return Expanded(flex: 1, child: Text(snapshot.data.toString()));
+
+              }else{
+
+              }
+            } ),
             PieChart(dataMap: {
               "Total": 25,
               "Recovered": 10,

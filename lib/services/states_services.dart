@@ -12,7 +12,7 @@ class StatesServices {
 
     if (response.statusCode == 200) {
 
-      final Map<String, dynamic> data = jsonDecode(response.body);
+      var data = jsonDecode(response.body);
 
       return WorldsStates.fromJson(data);
 
