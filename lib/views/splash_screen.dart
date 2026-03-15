@@ -19,7 +19,11 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const WorldsStates()));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const WorldsStates()),
+        (route) => false,
+      );
     });
 
     controller = AnimationController(
